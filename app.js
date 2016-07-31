@@ -5,11 +5,12 @@
 
     var RandomQuoteComponent = Component({
         selector: 'random-quote',
-        template: '<em>{{ quote }}</em>'
+        template: '<em>{{ quote.line }} - {{ quote.author }}</em>'
     })
     .Class({
         constructor: function(){
-            this.quote = 'This is a quote'
+            var count = Math.floor(Math.random()*quotes.length);
+            this.quote = quotes[count];
         }
     })
 
