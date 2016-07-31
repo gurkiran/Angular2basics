@@ -1,44 +1,29 @@
-(function() {
+;(function(app){
 
     var Class = ng.core.Class;
-    var Component = ng.core.Component;
-    var bootstrap = ng.platformBrowserDynamic.bootstrap;
 
-    var QuoteService = Class({
-        constructor: function QuoteService(){
-            this.quotes = quotes;
+    app.RandomQuoteService = Class({
+        constructor: function RandomQuoteService(){
+            this.quote = quotes;
         },
         getRandomQuote: function(){
-            var count = Math.floor(Math.random()*quotes.length);
-            return this.quotes[count];
+            var count = Math.floor(Math.random() * quotes.length);
+            return this.quote[count];
+        },
+        generateRandomQuote: function(count, delay, callback){
+            var self = this;
+            function generate(remainingCount){
+                callback(self.getRandomQuote());
+                if(remainingCount > 1) {
+                        setTimeout(function(){
+                        generate(remainingCount - 1);
+                    }, delay);
+                }
+            }
+            generate(count);
         }
     })
 
-    var RandomQuoteComponent = Component({
-        selector: 'random-quote',
-        template: '<em>{{ quote.line }} - {{ quote.author }}</em>'
-    })
-    .Class({
-        constructor: [ QuoteService, function RandomQuoteComponent(quoteService){
-            this.quote = quoteService.getRandomQuote();
-        }]
-    })
-
-    var AppComponent = Component({
-        selector: 'my-app',
-        providers: [QuoteService],
-        directives: [RandomQuoteComponent],
-        template: '<h1>Hello World !</h1>'+'<p><random-quote></random-quote></p>'
-    })
-    .Class({
-        constructor: function AppComponent(){
-            // empty
-        }
-    })
-
-    document.addEventListener('DOMContentLoaded', function(){
-        bootstrap(AppComponent);
-    })
 
     var quotes =  [
     {
@@ -81,6 +66,7 @@
       "line": "The first 90% of the code accounts for the first 90% of the development time. The remaining 10% of the code accounts for the other 90% of the development time.",
       "author": "Tom Cargill"
     }
-  ];
+  ]
 
-})();
+
+}(window.app || (window.app = {})));
