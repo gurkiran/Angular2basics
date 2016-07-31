@@ -1,7 +1,18 @@
 (function() {
 
+    var Class = ng.core.Class;
     var Component = ng.core.Component;
     var bootstrap = ng.platformBrowserDynamic.bootstrap;
+
+    var QuoteService = Class({
+        constructor: function(){
+            this.quotes = quotes;
+        },
+        getRandomQuote: function(){
+            var count = Math.floor(Math.random()*quotes.length);
+            return this.quotes[count];
+        }
+    })
 
     var RandomQuoteComponent = Component({
         selector: 'random-quote',
@@ -9,8 +20,8 @@
     })
     .Class({
         constructor: function(){
-            var count = Math.floor(Math.random()*quotes.length);
-            this.quote = quotes[count];
+            var quoteService = new QuoteService();
+            this.quote = quoteService.getRandomQuote();
         }
     })
 
